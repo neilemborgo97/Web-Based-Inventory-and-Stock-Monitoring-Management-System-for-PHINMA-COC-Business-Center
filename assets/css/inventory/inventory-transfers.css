@@ -1,0 +1,66 @@
+/* Inventory Transfers Styles */
+
+#transfersTable_wrapper .dataTables_filter input {
+    border-radius: 8px;
+    padding: 8px 12px;
+    border: 1px solid #dee2e6;
+}
+
+.badge {
+    font-size: 0.85rem;
+    padding: 6px 10px;
+}
+
+#transfersTable tbody tr {
+    transition: background-color 0.2s ease;
+}
+
+#transfersTable tbody tr:hover {
+    background-color: rgba(3, 96, 15, 0.05) !important;
+}
+
+#transferModal .form-label {
+    font-weight: 500;
+    color: #495057;
+}
+
+#transferModal .form-control:focus,
+#transferModal .form-select:focus {
+    border-color: var(--primary-green);
+    box-shadow: 0 0 0 0.2rem rgba(3, 96, 15, 0.15);
+}
+
+#transferItemsBody tr {
+    vertical-align: middle;
+}
+
+#transferItemsBody .form-control-sm,
+#transferItemsBody .form-select-sm {
+    font-size: 0.875rem;
+}
+
+.current-stock {
+    font-weight: 600;
+}
+
+.current-stock.text-warning {
+    color: #ffc107 !important;
+}
+
+.btn-action {
+    padding: 5px 10px;
+    font-size: 0.85rem;
+}
+
+.dataTables_empty {
+    padding: 40px !important;
+    color: #6c757d;
+}
+
+@media (max-width: 767.98px) {
+    #transfersTable th:nth-child(7),
+    #transfersTable td:nth-child(7) {
+        display: none;
+    }
+}
+

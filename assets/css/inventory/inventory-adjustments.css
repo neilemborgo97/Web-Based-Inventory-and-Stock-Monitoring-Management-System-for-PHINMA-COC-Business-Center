@@ -1,0 +1,76 @@
+/* Inventory Adjustments Styles */
+
+/* DataTable customization */
+#adjustmentsTable_wrapper .dataTables_filter input {
+    border-radius: 8px;
+    padding: 8px 12px;
+    border: 1px solid #dee2e6;
+}
+
+/* Badge styles */
+.badge {
+    font-size: 0.85rem;
+    padding: 6px 10px;
+}
+
+/* Table row hover */
+#adjustmentsTable tbody tr {
+    transition: background-color 0.2s ease;
+}
+
+#adjustmentsTable tbody tr:hover {
+    background-color: rgba(3, 96, 15, 0.05) !important;
+}
+
+/* Modal form */
+#adjustmentModal .form-label {
+    font-weight: 500;
+    color: #495057;
+}
+
+#adjustmentModal .form-control:focus,
+#adjustmentModal .form-select:focus {
+    border-color: var(--primary-green);
+    box-shadow: 0 0 0 0.2rem rgba(3, 96, 15, 0.15);
+}
+
+/* Items table in modal */
+#adjustmentItemsBody tr {
+    vertical-align: middle;
+}
+
+#adjustmentItemsBody .form-control-sm,
+#adjustmentItemsBody .form-select-sm {
+    font-size: 0.875rem;
+}
+
+.current-stock {
+    font-weight: 600;
+}
+
+.current-stock.text-warning {
+    color: #ffc107 !important;
+}
+
+/* Action buttons */
+.btn-action {
+    padding: 5px 10px;
+    font-size: 0.85rem;
+}
+
+/* Empty state */
+.dataTables_empty {
+    padding: 40px !important;
+    color: #6c757d;
+}
+
+/* Responsive adjustments */
+@media (max-width: 767.98px) {
+    #adjustmentsTable th:nth-child(7),
+    #adjustmentsTable td:nth-child(7),
+    #adjustmentsTable th:nth-child(8),
+    #adjustmentsTable td:nth-child(8) {
+        display: none;
+    }
+}
+

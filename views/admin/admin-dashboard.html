@@ -1,0 +1,415 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Dashboard - PHINMA COC Business Center IMS</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11.7.3/dist/sweetalert2.min.css">
+    <link href="../../assets/css/shared/shared-layout.css" rel="stylesheet">
+    <link href="../../assets/css/admin/admin-dashboard.css" rel="stylesheet">
+    <meta name="csrf-token" content="">
+</head>
+<body data-require-auth="true" data-required-level="50">
+    <div class="wrapper">
+        <!-- Sidebar -->
+        <nav id="sidebar" class="sidebar">
+            <div class="sidebar-header">
+                <img src="../../assets/images/logo.png" alt="Logo" class="sidebar-logo">
+                <h5 class="sidebar-title">Business Center IMS</h5>
+                <small class="text-muted">PHINMA COC</small>
+            </div>
+
+            <ul class="sidebar-nav">
+                <li class="nav-item active">
+                    <a href="admin-dashboard.html" class="nav-link">
+                        <i class="bi bi-speedometer2"></i>
+                        <span>Dashboard</span>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href="admin-purchase-order.html" class="nav-link">
+                        <i class="bi bi-cart-check"></i>
+                        <span>Purchase Orders</span>
+                    </a>
+                </li>
+                
+                <li class="nav-section">Inventory</li>
+                <li class="nav-item">
+                    <a href="../inventory/inventory-stock.html" class="nav-link">
+                        <i class="bi bi-boxes"></i>
+                        <span>Stock Levels</span>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href="../inventory/inventory-adjustments.html" class="nav-link">
+                        <i class="bi bi-arrow-up-down"></i>
+                        <span>Adjustments</span>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href="../inventory/inventory-transfers.html" class="nav-link">
+                        <i class="bi bi-arrow-left-right"></i>
+                        <span>Transfers</span>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href="../inventory/inventory-returns.html" class="nav-link">
+                        <i class="bi bi-arrow-counterclockwise"></i>
+                        <span>Purchase Returns</span>
+                    </a>
+                </li>
+                
+                <li class="nav-section">Masterfiles</li>
+                <li class="nav-item">
+                    <a href="../masterfiles/masterfiles-items.html" class="nav-link">
+                        <i class="bi bi-box-seam"></i>
+                        <span>Items</span>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href="../masterfiles/masterfiles-categories.html" class="nav-link">
+                        <i class="bi bi-tags"></i>
+                        <span>Categories</span>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href="../masterfiles/masterfiles-suppliers.html" class="nav-link">
+                        <i class="bi bi-truck"></i>
+                        <span>Suppliers</span>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href="../masterfiles/masterfiles-warehouses.html" class="nav-link">
+                        <i class="bi bi-building"></i>
+                        <span>Warehouses</span>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href="../masterfiles/masterfiles-sizes.html" class="nav-link">
+                        <i class="bi bi-rulers"></i>
+                        <span>Sizes</span>
+                    </a>
+                </li>
+                
+                <li class="nav-section">Administration</li>
+                <li class="nav-item">
+                    <a href="../masterfiles/masterfiles-users.html" class="nav-link">
+                        <i class="bi bi-people"></i>
+                        <span>Users</span>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href="../masterfiles/masterfiles-departments.html" class="nav-link">
+                        <i class="bi bi-diagram-3"></i>
+                        <span>Departments</span>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href="../masterfiles/masterfiles-courses.html" class="nav-link">
+                        <i class="bi bi-mortarboard"></i>
+                        <span>Courses</span>
+                    </a>
+                </li>
+            </ul>
+
+            <div class="sidebar-footer">
+                <button class="btn btn-outline-danger btn-sm w-100" id="logoutBtn">
+                    <i class="bi bi-box-arrow-left me-2"></i>Logout
+                </button>
+            </div>
+        </nav>
+
+        <!-- Main Content -->
+        <div class="main-content">
+            <!-- Top Header -->
+            <header class="top-header">
+                <div class="d-flex align-items-center">
+                    <button class="btn btn-link sidebar-toggle" id="sidebarToggle">
+                        <i class="bi bi-list fs-4"></i>
+                    </button>
+                    <h4 class="page-title mb-0">Dashboard</h4>
+                </div>
+                
+                <div class="header-right">
+                    <div class="dropdown">
+                        <button class="btn btn-link dropdown-toggle user-dropdown" type="button" id="userDropdown" data-bs-toggle="dropdown">
+                            <div class="user-avatar">
+                                <i class="bi bi-person-circle"></i>
+                            </div>
+                            <span class="user-name" id="headerUserName">Admin</span>
+                        </button>
+                        <ul class="dropdown-menu dropdown-menu-end">
+                            <li><span class="dropdown-item-text small text-muted" id="headerUserRole">Administrator</span></li>
+                            <li><hr class="dropdown-divider"></li>
+                            <li><a class="dropdown-item" href="#" id="headerLogoutBtn"><i class="bi bi-box-arrow-left me-2"></i>Logout</a></li>
+                        </ul>
+                    </div>
+                </div>
+            </header>
+
+            <!-- Page Content -->
+            <div class="page-content">
+                <!-- Stats Cards -->
+                <div class="row g-4 mb-4">
+                    <div class="col-xl-3 col-md-6">
+                        <div class="stat-card stat-card-primary">
+                            <div class="stat-card-body">
+                                <div class="stat-icon">
+                                    <i class="bi bi-box-seam"></i>
+                                </div>
+                                <div class="stat-info">
+                                    <h3 class="stat-value" id="totalItems">0</h3>
+                                    <p class="stat-label">Total Items</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-xl-3 col-md-6">
+                        <div class="stat-card stat-card-success">
+                            <div class="stat-card-body">
+                                <div class="stat-icon">
+                                    <i class="bi bi-cart-check"></i>
+                                </div>
+                                <div class="stat-info">
+                                    <h3 class="stat-value" id="totalPO">0</h3>
+                                    <p class="stat-label">Purchase Orders</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-xl-3 col-md-6">
+                        <div class="stat-card stat-card-warning">
+                            <div class="stat-card-body">
+                                <div class="stat-icon">
+                                    <i class="bi bi-truck"></i>
+                                </div>
+                                <div class="stat-info">
+                                    <h3 class="stat-value" id="totalSuppliers">0</h3>
+                                    <p class="stat-label">Suppliers</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-xl-3 col-md-6">
+                        <div class="stat-card stat-card-info">
+                            <div class="stat-card-body">
+                                <div class="stat-icon">
+                                    <i class="bi bi-building"></i>
+                                </div>
+                                <div class="stat-info">
+                                    <h3 class="stat-value" id="totalWarehouses">0</h3>
+                                    <p class="stat-label">Warehouses</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Recent Activity & Quick Actions -->
+                <div class="row g-4">
+                    <!-- Recent Purchase Orders -->
+                    <div class="col-lg-8">
+                        <div class="card">
+                            <div class="card-header d-flex justify-content-between align-items-center">
+                                <h5 class="card-title mb-0">
+                                    <i class="bi bi-clock-history me-2"></i>Recent Purchase Orders
+                                </h5>
+                                <a href="admin-purchase-order.html" class="btn btn-sm btn-outline-primary">View All</a>
+                            </div>
+                            <div class="card-body p-0">
+                                <div class="table-responsive">
+                                    <table class="table table-hover mb-0">
+                                        <thead>
+                                            <tr>
+                                                <th>PO Number</th>
+                                                <th>Supplier</th>
+                                                <th>Created By</th>
+                                                <th>Date</th>
+                                                <th>Delivery Date</th>
+                                                <th>Total</th>
+                                                <th>Status</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody id="recentPOTable">
+                                            <tr>
+                                                <td colspan="8" class="text-center py-4">
+                                                    <div class="spinner-border spinner-border-sm text-primary" role="status"></div>
+                                                    <span class="ms-2">Loading...</span>
+                                                </td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Quick Actions -->
+                    <div class="col-lg-4">
+                        <div class="card">
+                            <div class="card-header">
+                                <h5 class="card-title mb-0">
+                                    <i class="bi bi-lightning me-2"></i>Quick Actions
+                                </h5>
+                            </div>
+                            <div class="card-body">
+                                <div class="d-grid gap-2">
+                                    <a href="admin-purchase-order.html" class="btn btn-outline-primary">
+                                        <i class="bi bi-plus-circle me-2"></i>New Purchase Order
+                                    </a>
+                                    <a href="../masterfiles/masterfiles-items.html" class="btn btn-outline-success">
+                                        <i class="bi bi-box-seam me-2"></i>Manage Items
+                                    </a>
+                                    <a href="../masterfiles/masterfiles-suppliers.html" class="btn btn-outline-warning">
+                                        <i class="bi bi-truck me-2"></i>Manage Suppliers
+                                    </a>
+                                    <a href="../masterfiles/masterfiles-users.html" class="btn btn-outline-info">
+                                        <i class="bi bi-people me-2"></i>Manage Users
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Low Stock Alert -->
+                        <div class="card mt-4">
+                            <div class="card-header bg-danger text-white">
+                                <h5 class="card-title mb-0">
+                                    <i class="bi bi-exclamation-triangle me-2"></i>Low Stock Alert
+                                </h5>
+                            </div>
+                            <div class="card-body">
+                                <div id="lowStockList">
+                                    <p class="text-muted text-center mb-0">No low stock items</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Recent PO / Receiving Modal -->
+    <div class="modal fade" id="dashboardPOModal" tabindex="-1" aria-labelledby="dashboardPOModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-xl modal-dialog-scrollable">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="dashboardPOModalLabel">Purchase Order & Receiving</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <!-- PO Summary -->
+                    <div class="mb-3">
+                        <div class="row">
+                            <div class="col-md-6">
+                                <h5 class="mb-1" id="dashPoNumber">PO-0000</h5>
+                                <div class="mb-2">
+                                    <span class="badge bg-secondary" id="dashPoSupplier">Supplier</span>
+                                    <span class="badge badge-status ms-2" id="dashPoStatusBadge" style="display: none;"></span>
+                                </div>
+                                <div id="dashPoCreatedBy" class="text-muted small mb-1" style="display: none;"></div>
+                                <div id="dashPoCancelledBy" class="text-danger small" style="display: none;"></div>
+                            </div>
+                            <div class="col-md-6 text-md-end">
+                                <div><strong>Order Date:</strong> <span id="dashPoOrderDate">-</span></div>
+                                <div><strong>Expected Delivery Date:</strong> <span id="dashPoExpectedDeliveryDate">-</span></div>
+                                <div><strong>Actual Delivery Date:</strong> <span id="dashPoActualDeliveryDate">-</span></div>
+                                <div><strong>PO Total:</strong> <span id="dashPoTotal" class="text-success fw-semibold">₱0.00</span></div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <hr>
+
+                    <!-- Receiving Form -->
+                    <form id="dashboardReceivingForm">
+                        <input type="hidden" id="dashReceivingPoId">
+                        <input type="hidden" id="dashReceivingSupplierId">
+
+                        <div class="row g-3 mb-3">
+                            <div class="col-md-3">
+                                <label class="form-label">RR Number <span class="text-danger">*</span></label>
+                                <input type="text" class="form-control" id="dashReceivingRR" required>
+                            </div>
+                            <div class="col-md-3">
+                                <label class="form-label">DR Number <span class="text-danger">*</span></label>
+                                <input type="text" class="form-control" id="dashReceivingDR" required>
+                            </div>
+                            <div class="col-md-3">
+                                <label class="form-label">Warehouse <span class="text-danger">*</span></label>
+                                <select class="form-select" id="dashReceivingWarehouse" required>
+                                    <option value="">Select Warehouse</option>
+                                </select>
+                            </div>
+                            <div class="col-md-3">
+                                <label class="form-label">Receiving Date <span class="text-danger">*</span></label>
+                                <input type="date" class="form-control" id="dashReceivingDate" required>
+                            </div>
+                            <div class="col-md-3">
+                                <label class="form-label">Discount</label>
+                                <div class="input-group">
+                                    <span class="input-group-text">₱</span>
+                                    <input type="number" class="form-control" id="dashReceivingDiscount" min="0" step="0.01" value="0">
+                                </div>
+                            </div>
+                            <div class="col-md-9">
+                                <label class="form-label">Remarks</label>
+                                <input type="text" class="form-control" id="dashReceivingRemarks">
+                            </div>
+                        </div>
+
+                        <div class="table-responsive">
+                            <table class="table table-sm align-middle">
+                                <thead class="table-light">
+                                    <tr>
+                                        <th>Item</th>
+                                        <th class="text-center">Ordered</th>
+                                        <th class="text-center">Received So Far</th>
+                                        <th class="text-center">Remaining</th>
+                                        <th class="text-center">Qty to Receive</th>
+                                        <th class="text-end">Unit Cost</th>
+                                        <th class="text-end">Line Total</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="dashReceivingItemsBody">
+                                    <!-- Rows populated via JS -->
+                                </tbody>
+                                <tfoot>
+                                    <tr class="table-light">
+                                        <td colspan="6" class="text-end fw-bold">Receiving Total</td>
+                                        <td class="text-end fw-bold text-success" id="dashReceivingTotal">₱0.00</td>
+                                    </tr>
+                                </tfoot>
+                            </table>
+                        </div>
+
+                        <!-- Receiving History -->
+                        <div class="mt-4">
+                            <h6 class="mb-2">Receiving History</h6>
+                            <div id="dashReceivingHistory" class="small text-muted">
+                                <!-- History rows injected via JS -->
+                                <p class="mb-0">No receiving transactions yet for this purchase order.</p>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">Close</button>
+                    <button type="submit" form="dashboardReceivingForm" class="btn btn-primary" id="dashReceivingSaveBtn">
+                        <span class="btn-text">Save Receiving</span>
+                        <span class="spinner-border spinner-border-sm d-none" role="status" aria-hidden="true"></span>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11.7.3/dist/sweetalert2.all.min.js"></script>
+    <script type="module" src="../../js/admin/admin-dashboard.js"></script>
+</body>
+</html>
+

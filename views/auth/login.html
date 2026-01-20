@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PHINMA COC Business Center IMS - Login</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11.7.3/dist/sweetalert2.min.css">
+    <link href="../../assets/css/auth/login.css" rel="stylesheet">
+</head>
+<body>
+    <div class="container-fluid p-0 vh-100">
+        <div class="row g-0 h-100">
+            <!-- Left Branding Section -->
+            <div class="col-md-7 bg-light d-flex flex-column justify-content-center align-items-center p-5 position-relative">
+                <div class="text-center mb-4">
+                    <div class="mb-3">
+                        <img src="../../assets/images/i.png" alt="CSDL Logo" style="width: 400px; height: 300px; object-fit: contain;">
+                    </div>
+                    <h2 class="fw-bold text-dark">Business Center Inventory Management System</h2>
+                    <p class="text-muted">PHINMA Cagayan de Oro College</p>
+                </div>
+                
+                <!-- Background Decoration -->
+                <div class="position-absolute top-0 start-0 w-100 h-100 overflow-hidden" style="z-index: 0;">
+                    <div class="position-absolute" style="width: 200px; height: 300px; background-color: rgba(3, 96, 15, 0.10); top: 10%; left: 5%; transform: skew(-15deg);"></div>
+                    <div class="position-absolute" style="width: 150px; height: 200px; background-color: rgba(3, 96, 15, 0.15); top: 15%; left: 25%; transform: skew(-15deg);"></div>
+                    <div class="position-absolute" style="width: 250px; height: 350px; background-color: rgba(3, 96, 15, 0.20); bottom: 10%; right: 15%; transform: skew(-15deg);"></div>
+                </div>
+            </div>
+            
+            <!-- Right Login Form Section -->
+            <div class="col-md-5 bg-white d-flex align-items-center justify-content-center">
+                <div class="login-form-container p-4" style="max-width: 500px;">
+                    <div class="mb-4 d-flex align-items-center justify-content-center gap-3">
+                        <img src="../../assets/images/logo.png" alt="PHINMA Education" style="height: 64px; width: auto; object-fit: contain;">
+                        <div class="text-start">
+                            <div class="fw-semibold" style="letter-spacing:.5px; color:#6c757d; font-size: 1.5rem; line-height: 1;">PHINMA EDUCATION</div>
+                            <div class="text-muted" style="margin-top:4px; font-size:.95rem;">MAKING LIVES BETTER THROUGH EDUCATION</div>
+                        </div>
+                    </div>
+                    
+                    <h5 class="mb-4 border-bottom pb-2">Sign In</h5>
+                    
+                    <!-- Error Message -->
+                    <div id="errorMessage" class="alert alert-danger d-none" role="alert">
+                        <i class="bi bi-exclamation-circle me-2"></i>
+                        <span id="errorText"></span>
+                    </div>
+                    
+                    <form id="loginForm">
+                        <div class="mb-3">
+                            <label for="school_id" class="form-label small fw-bold">School ID</label>
+                            <div class="input-group">
+                                <input type="text" class="form-control" id="school_id" name="school_id" placeholder="Enter School ID" autocomplete="username" required>
+                                <span class="input-group-text bg-white border-start-0">
+                                    <i class="bi bi-person-fill text-muted"></i>
+                                </span>
+                            </div>
+                        </div>
+                        
+                        <div class="mb-3">
+                            <label for="password" class="form-label small fw-bold">Password</label>
+                            <div class="input-group">
+                                <input type="password" class="form-control" id="password" name="password" placeholder="Enter Password" autocomplete="current-password" required>
+                                <span class="input-group-text bg-white border-start-0 password-toggle" style="cursor: pointer;" id="togglePassword">
+                                    <i class="bi bi-eye-slash-fill text-muted"></i>
+                                </span>
+                            </div>
+                        </div>
+
+                        <!-- Math Captcha -->
+                        <div class="mb-3">
+                            <div class="row g-1 align-items-center justify-content-center">
+                                <div class="col-3 text-center">
+                                    <div class="border rounded p-2 bg-light">
+                                        <span id="captchaNum1" class="fw-bold">5</span>
+                                    </div>
+                                </div>
+                                <div class="col-2 text-center">
+                                    <span class="fw-bold">+</span>
+                                </div>
+                                <div class="col-2 text-center">
+                                    <div class="border rounded p-2 bg-light">
+                                        <span id="captchaNum2" class="fw-bold">3</span>
+                                    </div>
+                                </div>
+                                <div class="col-2 text-center">
+                                    <span class="fw-bold">=</span>
+                                </div>
+                                <div class="col-2 text-center">
+                                    <input type="text" class="form-control captcha-input text-center" id="captchaInput" name="captchaInput" required>
+                                </div>
+                                <div class="col-1 text-center">
+                                    <button type="button" id="refreshCaptcha" class="btn btn-sm btn-outline-secondary rounded-circle">
+                                        <i class="bi bi-arrow-clockwise"></i>
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="d-grid gap-2 mt-4">
+                            <button type="submit" class="btn btn-success py-2 border-0" id="loginButton" style="background: linear-gradient(135deg, #03600f 0%, #0a8f1b 100%);">
+                                <span id="loginButtonText">Sign In</span>
+                                <i class="bi bi-box-arrow-in-right"></i>
+                                <span id="loginSpinner" class="spinner-border spinner-border-sm d-none ms-2" role="status" aria-hidden="true"></span>
+                            </button>
+                        </div>
+                        
+                        <div class="text-center mt-3">
+                            <a href="forget-password.html" class="text-decoration-none small" id="forgotPasswordLink">Forgot Password?</a>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+    </div>    <!-- Forgot Password Modal -->
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11.7.3/dist/sweetalert2.all.min.js"></script>
+    <meta name="csrf-token" content="">
+    <script type="module" src="../../js/auth/auth-login.js"></script>
+</body>
+</html>

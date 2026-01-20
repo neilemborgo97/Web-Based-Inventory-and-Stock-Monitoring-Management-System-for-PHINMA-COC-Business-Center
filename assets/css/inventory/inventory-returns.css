@@ -1,0 +1,64 @@
+/* Purchase Returns Styles */
+
+#returnsTable_wrapper .dataTables_filter input {
+    border-radius: 8px;
+    padding: 8px 12px;
+    border: 1px solid #dee2e6;
+}
+
+.badge {
+    font-size: 0.85rem;
+    padding: 6px 10px;
+}
+
+#returnsTable tbody tr {
+    transition: background-color 0.2s ease;
+}
+
+#returnsTable tbody tr:hover {
+    background-color: rgba(3, 96, 15, 0.05) !important;
+}
+
+#returnModal .form-label {
+    font-weight: 500;
+    color: #495057;
+}
+
+#returnModal .form-control:focus,
+#returnModal .form-select:focus {
+    border-color: var(--primary-green);
+    box-shadow: 0 0 0 0.2rem rgba(3, 96, 15, 0.15);
+}
+
+#returnItemsBody tr {
+    vertical-align: middle;
+}
+
+#returnItemsBody .form-control-sm {
+    font-size: 0.875rem;
+}
+
+.row-total {
+    font-weight: 600;
+    color: var(--primary-green);
+}
+
+.btn-action {
+    padding: 5px 10px;
+    font-size: 0.85rem;
+}
+
+.dataTables_empty {
+    padding: 40px !important;
+    color: #6c757d;
+}
+
+@media (max-width: 991.98px) {
+    #returnsTable th:nth-child(9),
+    #returnsTable td:nth-child(9),
+    #returnsTable th:nth-child(10),
+    #returnsTable td:nth-child(10) {
+        display: none;
+    }
+}
+

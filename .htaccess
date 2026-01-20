@@ -1,0 +1,63 @@
+RewriteEngine On
+RewriteBase /phinmacoc_ims/
+
+# Admin dashboard pages - redirect to security wrappers
+RewriteRule ^views/admin/admin-dashboard\.html$ views/security/admin/security-admin-dashboard.php [L,NC]
+RewriteRule ^views/admin/admin-purchase-order\.html$ views/security/admin/security-admin-purchase-order.php [L,NC]
+
+# Procurement Officer pages
+RewriteRule ^views/procurement_officer/procurement-officer-dashboard\.html$ views/security/procurement_officer/security-procurement-officer-dashboard.php [L,NC]
+RewriteRule ^views/procurement_officer/procurement-officer-purchase-order\.html$ views/security/procurement_officer/security-procurement-officer-purchase-order.php [L,NC]
+
+# Warehouse Manager pages
+RewriteRule ^views/warehouse_manager/warehouse-manager-dashboard\.html$ views/security/warehouse_manager/security-warehouse-manager-dashboard.php [L,NC]
+
+# Department Head pages
+RewriteRule ^views/department_head/department-head-dashboard\.html$ views/security/department_head/security-department-head-dashboard.php [L,NC]
+
+# Inventory Clerk pages
+RewriteRule ^views/inventory_clerk/inventory-clerk-dashboard\.html$ views/security/inventory_clerk/security-inventory-clerk-dashboard.php [L,NC]
+
+# Inventory pages - redirect to security wrappers
+RewriteRule ^views/inventory/inventory-stock\.html$ views/security/inventory/security-inventory-stock.php [L,NC]
+RewriteRule ^views/inventory/inventory-adjustments\.html$ views/security/inventory/security-inventory-adjustments.php [L,NC]
+RewriteRule ^views/inventory/inventory-transfers\.html$ views/security/inventory/security-inventory-transfers.php [L,NC]
+RewriteRule ^views/inventory/inventory-returns\.html$ views/security/inventory/security-inventory-returns.php [L,NC]
+
+# Masterfiles pages - redirect to security wrappers
+RewriteRule ^views/masterfiles/masterfiles-categories\.html$ views/security/masterfiles/security-masterfiles-categories.php [L,NC]
+RewriteRule ^views/masterfiles/masterfiles-courses\.html$ views/security/masterfiles/security-masterfiles-courses.php [L,NC]
+RewriteRule ^views/masterfiles/masterfiles-departments\.html$ views/security/masterfiles/security-masterfiles-departments.php [L,NC]
+RewriteRule ^views/masterfiles/masterfiles-items\.html$ views/security/masterfiles/security-masterfiles-items.php [L,NC]
+RewriteRule ^views/masterfiles/masterfiles-sizes\.html$ views/security/masterfiles/security-masterfiles-sizes.php [L,NC]
+RewriteRule ^views/masterfiles/masterfiles-suppliers\.html$ views/security/masterfiles/security-masterfiles-suppliers.php [L,NC]
+RewriteRule ^views/masterfiles/masterfiles-users\.html$ views/security/masterfiles/security-masterfiles-users.php [L,NC]
+RewriteRule ^views/masterfiles/masterfiles-warehouses\.html$ views/security/masterfiles/security-masterfiles-warehouses.php [L,NC]
+
+# Prevent cached dashboard pages after logout
+<IfModule mod_headers.c>
+    <FilesMatch "\.(php|html)$">
+        Header set Cache-Control "no-store, no-cache, must-revalidate, max-age=0"
+        Header set Pragma "no-cache"
+        Header set Expires 0
+    </FilesMatch>
+</IfModule>
+
+# Security headers
+<IfModule mod_headers.c>
+    Header set X-Content-Type-Options "nosniff"
+    Header set X-Frame-Options "DENY"
+    Header set X-XSS-Protection "1; mode=block"
+</IfModule>
+
+# Deny access to sensitive files
+<FilesMatch "\.(sql|log|env)$">
+    Order allow,deny
+    Deny from all
+</FilesMatch>
+
+# Deny access to config directory
+<IfModule mod_rewrite.c>
+    RewriteRule ^api/config/.*$ - [F,L]
+</IfModule>
+

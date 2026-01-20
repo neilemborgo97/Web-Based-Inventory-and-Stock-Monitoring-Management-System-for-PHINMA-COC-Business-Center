@@ -1,0 +1,131 @@
+/* Admin Dashboard Specific Styles */
+
+/* Low Stock List */
+#lowStockList .low-stock-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px 0;
+    border-bottom: 1px solid #f0f0f0;
+}
+
+#lowStockList .low-stock-item:last-child {
+    border-bottom: none;
+}
+
+#lowStockList .item-name {
+    font-weight: 500;
+    color: #333;
+}
+
+#lowStockList .item-qty {
+    font-size: 0.85rem;
+    color: #dc3545;
+    font-weight: 600;
+}
+
+/* Quick Actions */
+.card .btn-outline-primary {
+    border-color: var(--primary-green);
+    color: var(--primary-green);
+}
+
+.card .btn-outline-primary:hover {
+    background: var(--primary-green);
+    border-color: var(--primary-green);
+    color: #fff;
+}
+
+/* Recent PO Table */
+#recentPOTable tr {
+    cursor: pointer;
+    transition: background 0.2s ease;
+}
+
+#recentPOTable tr:hover {
+    background: #f8f9fa;
+}
+
+/* Welcome Banner (optional) */
+.welcome-banner {
+    background: linear-gradient(135deg, var(--primary-green) 0%, var(--primary-green-light) 100%);
+    border-radius: 12px;
+    padding: 25px 30px;
+    color: #fff;
+    margin-bottom: 20px;
+}
+
+.welcome-banner h2 {
+    font-weight: 600;
+    margin-bottom: 5px;
+}
+
+.welcome-banner p {
+    opacity: 0.9;
+    margin-bottom: 0;
+}
+
+/* Activity Timeline */
+.activity-timeline {
+    position: relative;
+    padding-left: 30px;
+}
+
+.activity-timeline::before {
+    content: '';
+    position: absolute;
+    left: 10px;
+    top: 0;
+    bottom: 0;
+    width: 2px;
+    background: #e9ecef;
+}
+
+.activity-item {
+    position: relative;
+    padding-bottom: 20px;
+}
+
+.activity-item::before {
+    content: '';
+    position: absolute;
+    left: -24px;
+    top: 5px;
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    background: var(--primary-green);
+    border: 2px solid #fff;
+    box-shadow: 0 0 0 2px var(--primary-green);
+}
+
+.activity-item .activity-time {
+    font-size: 0.75rem;
+    color: #6c757d;
+}
+
+.activity-item .activity-text {
+    font-size: 0.9rem;
+    color: #333;
+}
+
+/* Status badges - same as purchase order page */
+.badge-pending { background: #ff9800; color: #fff; } /* ORANGE */
+.badge-approved { background: #cce5ff; color: #004085; }
+.badge-completed { background: #28a745; color: #fff; } /* GREEN */
+.badge-receiving_partial { background: #ffc107; color: #000; } /* YELLOW */
+.badge-cancelled { background: #dc3545; color: #fff; } /* RED */
+
+/* Disabled fields styling */
+.form-control:disabled,
+.form-select:disabled {
+    background-color: #e9ecef !important;
+    opacity: 0.7;
+    cursor: not-allowed;
+}
+
+.bg-light.form-control:disabled,
+.bg-light.form-select:disabled {
+    background-color: #e9ecef !important;
+}
+

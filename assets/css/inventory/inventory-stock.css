@@ -1,0 +1,73 @@
+/* Stock Management Styles */
+
+/* DataTable customization */
+#stockTable_wrapper .dataTables_filter input {
+    border-radius: 8px;
+    padding: 8px 12px;
+    border: 1px solid #dee2e6;
+}
+
+#stockTable_wrapper .dataTables_length select {
+    border-radius: 8px;
+    padding: 6px 30px 6px 12px;
+}
+
+/* Badge styles */
+.badge {
+    font-size: 0.85rem;
+    padding: 6px 10px;
+}
+
+.bg-warning {
+    background-color: #ffc107 !important;
+    color: #000;
+}
+
+.bg-success {
+    background-color: #198754 !important;
+    color: #fff;
+}
+
+/* Unit cost and total value */
+.unit-cost {
+    font-weight: 600;
+    color: var(--primary-green);
+}
+
+.total-value {
+    font-weight: 600;
+    color: #0d6efd;
+}
+
+/* Table row hover */
+#stockTable tbody tr {
+    transition: background-color 0.2s ease;
+}
+
+#stockTable tbody tr:hover {
+    background-color: rgba(3, 96, 15, 0.05) !important;
+}
+
+/* Empty state */
+.dataTables_empty {
+    padding: 40px !important;
+    color: #6c757d;
+}
+
+/* Filter controls */
+.form-select-sm {
+    min-width: 150px;
+}
+
+/* Responsive adjustments */
+@media (max-width: 767.98px) {
+    #stockTable th:nth-child(4),
+    #stockTable td:nth-child(4),
+    #stockTable th:nth-child(5),
+    #stockTable td:nth-child(5),
+    #stockTable th:nth-child(8),
+    #stockTable td:nth-child(8) {
+        display: none;
+    }
+}
+
