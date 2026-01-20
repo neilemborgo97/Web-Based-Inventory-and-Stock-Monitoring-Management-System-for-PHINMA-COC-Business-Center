@@ -13,36 +13,27 @@ class StockModule {
     }
 
     async init() {
-        this.setupElements();
         this.bindEvents();
         await this.loadDropdownData();
-        
-        // Ensure table exists before initializing DataTable
+
         if (document.getElementById('stockTable')) {
             this.initDataTable();
         } else {
             console.error('Stock table element not found');
         }
-        
+
         await this.loadStats();
     }
 
-    setupElements() {
-        // Elements are ready
-    }
-
     bindEvents() {
-        // Warehouse filter
-        document.getElementById('warehouseFilter')?.addEventListener('change', (e) => {
+        document.getElementById('warehouseFilter')?.addEventListener('change', () => {
             this.applyFilters();
         });
 
-        // Item filter
-        document.getElementById('itemFilter')?.addEventListener('change', (e) => {
+        document.getElementById('itemFilter')?.addEventListener('change', () => {
             this.applyFilters();
         });
 
-        // Low stock button
         document.getElementById('lowStockBtn')?.addEventListener('click', () => {
             this.showLowStockAlert();
         });
@@ -69,7 +60,9 @@ class StockModule {
         const select = document.getElementById(elementId);
         if (!select) return;
 
-        select.innerHTML = includeAll ? '<option value="">All ' + (elementId.includes('warehouse') ? 'Warehouses' : 'Items') + '</option>' : '';
+        select.innerHTML = includeAll
+            ? `<option value="">All ${elementId.includes('warehouse') ? 'Warehouses' : 'Items'}</option>`
+            : '';
 
         data.forEach(item => {
             const option = document.createElement('option');
@@ -80,7 +73,6 @@ class StockModule {
     }
 
     initDataTable() {
-        // Destroy existing DataTable if it exists
         if (this.dataTable) {
             this.dataTable.destroy();
         }
@@ -91,31 +83,10 @@ class StockModule {
             ajax: {
                 url: '../../api/inventory/inventory-stock.php?action=list',
                 type: 'GET',
-                dataSrc: (json) => {
-                    console.log('DataTable response:', json);
-                    if (json.success && json.data) {
-                        return json.data;
-                    }
-                    console.error('DataTable error:', json.message || 'Unknown error');
-                    return [];
-                },
-                error: (xhr, error, thrown) => {
-                    console.error('DataTable AJAX error:', error, thrown, xhr);
-                    if (xhr.status === 401) {
-                        Swal.fire({
-                            icon: 'error',
-                            title: 'Authentication Error',
-                            text: 'Your session has expired. Please login again.',
-                            confirmButtonText: 'OK'
-                        }).then(() => {
-                            window.location.href = '../../views/auth/login.html';
-                        });
-                    }
-                },
-                data: (d) => {
-                    const warehouseId = document.getElementById('warehouseFilter')?.value || '';
-                    const itemId = document.getElementById('itemFilter')?.value || '';
-                    
+                dataSrc: json => json.success ? json.data : [],
+                data: d => {
+                    const warehouseId = document.getElementById('warehouseFilter')?.value;
+                    const itemId = document.getElementById('itemFilter')?.value;
                     if (warehouseId) d.warehouse_id = warehouseId;
                     if (itemId) d.item_id = itemId;
                 }
@@ -127,70 +98,66 @@ class StockModule {
                 { data: 'supplier_name', defaultContent: '-' },
                 { data: 'size_name', defaultContent: '-' },
                 { data: 'warehouse_name' },
-                { 
+
+                // Quantity (INT)
+                {
                     data: 'quantity_in_stock',
-                    render: (data, type, row) => {
-                        const qty = parseFloat(data) || 0;
-                        const isLowStock = qty <= 10;
-                        const badgeClass = isLowStock ? 'bg-warning' : 'bg-success';
-                        return `<span class="badge ${badgeClass}">${this.formatNumber(qty)}</span>`;
+                    render: data => {
+                        const qty = parseInt(data, 10) || 0;
+                        const badge = qty <= 10 ? 'bg-warning' : 'bg-success';
+                        return `<span class="badge ${badge}">${this.formatNumber(qty, 0)}</span>`;
                     }
                 },
-                { 
+
+                // Unit Cost (DECIMAL)
+                {
                     data: 'unit_cost',
-                    render: (data) => `<span class="unit-cost">₱${this.formatNumber(data || 0)}</span>`
+                    render: data => `₱${this.formatNumber(data, 2)}`
                 },
-                { 
+
+                // Total Value (INT)
+                {
                     data: 'total_value',
-                    render: (data) => `<span class="total-value">₱${this.formatNumber(data || 0)}</span>`
+                    render: data => `₱${this.formatNumber(Math.round(data || 0), 0)}`
                 }
             ],
             order: [[0, 'desc']],
             pageLength: 25,
             language: {
-                emptyTable: '<div class="text-center py-4"><i class="bi bi-inbox fs-1 text-muted"></i><p class="mt-2 text-muted">No stock records found</p></div>',
-                loadingRecords: '<div class="text-center py-4"><div class="spinner-border text-primary" role="status"></div><p class="mt-2">Loading stock levels...</p></div>',
-                processing: '<div class="text-center py-4"><div class="spinner-border text-primary" role="status"></div><p class="mt-2">Loading stock levels...</p></div>'
+                emptyTable: '<div class="text-center py-4 text-muted">No stock records found</div>',
+                processing: '<div class="text-center py-4">Loading stock levels...</div>'
             }
         });
     }
 
     applyFilters() {
-        if (this.dataTable) {
-            this.dataTable.ajax.reload();
-        }
+        this.dataTable?.ajax.reload();
     }
 
     async loadStats() {
         try {
             const response = await apiService.get('/inventory/inventory-stock.php?action=list');
-            
-            if (response.success && response.data) {
-                const stockLevels = response.data;
-                const lowStockResponse = await apiService.get('/inventory/inventory-stock.php?action=low_stock&threshold=10');
-                const lowStockItems = lowStockResponse.success ? lowStockResponse.data : [];
-                
-                // Total stock items (unique item-warehouse combinations)
-                const totalStockItems = stockLevels.length;
-                
-                // Low stock count
-                const lowStockCount = lowStockItems.length;
-                
-                // Total warehouses (unique)
-                const uniqueWarehouses = new Set(stockLevels.map(s => s.warehouse_id));
-                const totalWarehouses = uniqueWarehouses.size;
-                
-                // Total stock value
-                const totalValue = stockLevels.reduce((sum, item) => {
-                    return sum + (parseFloat(item.total_value) || 0);
-                }, 0);
-                
-                // Update UI
-                document.getElementById('totalStockItems').textContent = this.formatNumber(totalStockItems);
-                document.getElementById('lowStockCount').textContent = this.formatNumber(lowStockCount);
-                document.getElementById('totalWarehouses').textContent = this.formatNumber(totalWarehouses);
-                document.getElementById('totalValue').textContent = '₱' + this.formatNumber(totalValue);
-            }
+            const lowStockResponse = await apiService.get('/inventory/inventory-stock.php?action=low_stock&threshold=10');
+
+            if (!response.success) return;
+
+            const stockLevels = response.data || [];
+            const lowStockItems = lowStockResponse.success ? lowStockResponse.data : [];
+
+            const totalStockItems = stockLevels.length;
+            const lowStockCount = lowStockItems.length;
+            const totalWarehouses = new Set(stockLevels.map(s => s.warehouse_id)).size;
+
+            // TOTAL VALUE (INT)
+            const totalValue = Math.round(
+                stockLevels.reduce((sum, item) => sum + (parseFloat(item.total_value) || 0), 0)
+            );
+
+            document.getElementById('totalStockItems').textContent = this.formatNumber(totalStockItems, 0);
+            document.getElementById('lowStockCount').textContent = this.formatNumber(lowStockCount, 0);
+            document.getElementById('totalWarehouses').textContent = this.formatNumber(totalWarehouses, 0);
+            document.getElementById('totalValue').textContent = `₱${this.formatNumber(totalValue, 0)}`;
+
         } catch (error) {
             console.error('Error loading stats:', error);
         }
@@ -199,54 +166,40 @@ class StockModule {
     async showLowStockAlert() {
         try {
             const response = await apiService.get('/inventory/inventory-stock.php?action=low_stock&threshold=10');
-            
-            if (response.success && response.data.length > 0) {
-                let alertHtml = '<div class="list-group">';
-                response.data.forEach(item => {
-                    alertHtml += `
-                        <div class="list-group-item">
-                            <div class="d-flex justify-content-between align-items-center">
-                                <div>
-                                    <h6 class="mb-1">${this.escapeHtml(item.item_name)}</h6>
-                                    <small class="text-muted">${this.escapeHtml(item.warehouse_name)}</small>
-                                </div>
-                                <span class="badge bg-warning">${item.quantity_in_stock} units</span>
-                            </div>
-                        </div>
-                    `;
-                });
-                alertHtml += '</div>';
-                
-                Swal.fire({
-                    title: 'Low Stock Alert',
-                    html: alertHtml,
-                    icon: 'warning',
-                    width: '600px',
-                    confirmButtonText: 'Close'
-                });
-            } else {
-                Swal.fire({
-                    title: 'Low Stock Alert',
-                    text: 'No items are currently low in stock.',
-                    icon: 'info',
-                    confirmButtonText: 'OK'
-                });
+
+            if (!response.success || response.data.length === 0) {
+                Swal.fire('Low Stock Alert', 'No items are currently low in stock.', 'info');
+                return;
             }
-        } catch (error) {
-            console.error('Error loading low stock items:', error);
+
+            const html = response.data.map(item => `
+                <div class="list-group-item d-flex justify-content-between">
+                    <div>
+                        <strong>${this.escapeHtml(item.item_name)}</strong><br>
+                        <small>${this.escapeHtml(item.warehouse_name)}</small>
+                    </div>
+                    <span class="badge bg-warning">${item.quantity_in_stock} units</span>
+                </div>
+            `).join('');
+
             Swal.fire({
-                title: 'Error',
-                text: 'Failed to load low stock items.',
-                icon: 'error',
-                confirmButtonText: 'OK'
+                title: 'Low Stock Alert',
+                html: `<div class="list-group">${html}</div>`,
+                icon: 'warning',
+                width: 600
             });
+
+        } catch (error) {
+            console.error(error);
+            Swal.fire('Error', 'Failed to load low stock items.', 'error');
         }
     }
 
-    formatNumber(num) {
-        return parseFloat(num || 0).toLocaleString('en-US', {
-            minimumFractionDigits: 2,
-            maximumFractionDigits: 2
+    // 🔧 Universal formatter
+    formatNumber(num, decimals = 2) {
+        return Number(num || 0).toLocaleString('en-US', {
+            minimumFractionDigits: decimals,
+            maximumFractionDigits: decimals
         });
     }
 
@@ -259,4 +212,3 @@ class StockModule {
 
 export const stockModule = new StockModule();
 export default stockModule;
-
